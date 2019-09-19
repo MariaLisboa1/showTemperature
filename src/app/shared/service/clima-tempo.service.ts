@@ -1,9 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ClimaTempoService {
+  constructor(private http: HttpClient) {}
 
-  constructor() { }
+  listCities() {
+    return this.http.get<any>(environment.apiCities);
+  }
 }

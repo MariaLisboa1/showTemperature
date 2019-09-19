@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Map, latLng, tileLayer, Layer, marker } from "leaflet";
+import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
 
 @Component({
   selector: "app-map",
@@ -36,7 +37,10 @@ export class MapComponent implements OnInit {
     }
   ];
 
-  constructor(private geolocation: Geolocation) {}
+  constructor(
+    private geolocation: Geolocation,
+    private climaTempoService: ClimaTempoService
+  ) {}
 
   ngOnInit() {
     this.map = new Map("mapId").setView([42.35663, -71.1109], 16);
@@ -45,12 +49,6 @@ export class MapComponent implements OnInit {
       attribution: "edupala.com"
     }).addTo(this.map);
 
-    // fetch("./data.json")
-    //   .then(res => res.json())
-    //   .then(json => {
-    //     this.propertyList = json.properties;
-
-    //   });
     this.leafletMap();
   }
 
@@ -65,13 +63,13 @@ export class MapComponent implements OnInit {
     //   .catch(error => {
     //     console.log("Erro ao recuperar sua posição", error);
     //   });
-    console.log(this.properties);
-
-    this.properties.forEach(property => {
-      marker([property.lat, property.long])
-        .addTo(this.map)
-        .bindPopup(property.city)
-        .openPopup();
+    this.climaTempoService.listCities().subscribe(res => {
+      res.forEach(property => {
+        marker([property.lat, property.lgn])
+          .addTo(this.map)
+          .bindPopup(property.toponymName)
+          .openPopup();
+      });
     });
 
     // for (const property of this.properties) {
