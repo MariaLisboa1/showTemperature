@@ -1,0 +1,7 @@
+{
+  "name": "showTemperature",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
