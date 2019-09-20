@@ -40,10 +40,20 @@ export class MapComponent implements OnInit {
           .on("click", function(dadosCity) {
             MapComponent.getNameCityClick(dadosCity.latlng);
           })
-          .bindPopup(property.name)
+          .bindPopup()
           .openPopup();
       });
     });
+  }
+
+  //quando clicar na cidade, pega o nome, da cidade, pega id, e da put da api do clima para adicionar ao meu token
+  getIdCity(citys) {
+    this.climaTempoService.getIdCity(citys).subscribe(
+      res => {
+        console.log(res[0].id);
+      },
+      err => console.log(err)
+    );
   }
 
   static getNameCityClick(latlng) {
