@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
 import { SearchComponent } from "./components/search/search.component";
 import { HTTP } from "@ionic-native/http/ngx";
+import { SendAlert } from "./helpers/sendAlert/sendAlert";
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
@@ -15,6 +16,6 @@ import { HTTP } from "@ionic-native/http/ngx";
     ReactiveFormsModule,
     IonicModule
   ],
-  providers: [HTTP]
+  providers: [HTTP, SendAlert]
 })
 export class SharedModule {}

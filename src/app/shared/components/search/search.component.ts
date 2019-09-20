@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ClimaTempoService } from "../../service/clima-tempo.service";
 import { AlertController } from "@ionic/angular";
+import { SendAlert } from "../../helpers/sendAlert/sendAlert";
 
 @Component({
   selector: "app-search",
@@ -13,7 +14,7 @@ export class SearchComponent implements OnInit {
   nameCity;
   constructor(
     private cityService: ClimaTempoService,
-    public alertController: AlertController
+    private sendAlert: SendAlert
   ) {}
 
   ngOnInit() {}
@@ -33,29 +34,19 @@ export class SearchComponent implements OnInit {
     this.cityService.getIdCity(city).subscribe(
       res => {
         this.cityId = res[0].id;
-        this.getClima(this.cityId);
+        this.getclimate(this.cityId);
       },
       err => console.log(err)
     );
   }
 
-  getClima(cityId) {
+  getclimate(cityId) {
     this.cityService.getTemperature(cityId).subscribe(
       res => {
-        const graus = res;
-        this.presentAlert(graus);
+        const climate = res;
+        this.sendAlert.presentAlert(climate);
       },
       err => console.log(err)
     );
   }
-
-  presentAlert = async clima => {
-    const alert = await this.alertController.create({
-      header: `${clima.data.temperature}Cº`,
-      // subHeader: `${clima.data.temperature}Cº`,
-      message: `Hoje: ${clima.data.condition} no momento. A humidade está de ${clima.data.humidity}Cº e a Sensação termica: ${clima.data.sensation}`,
-      buttons: ["OK"]
-    });
-    await alert.present();
-  };
 }

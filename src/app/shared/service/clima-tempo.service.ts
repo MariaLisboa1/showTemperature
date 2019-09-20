@@ -11,10 +11,8 @@ import { finalize } from "rxjs/operators";
 })
 export class ClimaTempoService {
   constructor(
-    private http: HttpClient // private nativeHttp: HTTP,
-  ) // private plt: Platform,
-  // private loadingCtrl: LoadingController
-  {}
+    private http: HttpClient // private nativeHttp: HTTP, // private plt: Platform, // private loadingCtrl: LoadingController
+  ) {}
   data = [];
   listCities() {
     return this.http.get<any>(environment.apiCities);
@@ -27,6 +25,8 @@ export class ClimaTempoService {
   }
 
   getTemperature(cityId) {
+    console.log(cityId);
+
     const url = `${environment.apiClim}/api/v1/weather/locale/${cityId}/current?token=${environment.tokenClim}`;
 
     return this.http.get(url);
@@ -47,7 +47,6 @@ export class ClimaTempoService {
   }
 
   getNameCity(lat, lng) {
-    console.log(lat, lng);
     return this.http.get<any>(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
     );
