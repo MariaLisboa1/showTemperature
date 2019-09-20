@@ -10,7 +10,9 @@ export class SearchComponent implements OnInit {
   citys;
   constructor(private cityService: ClimaTempoService) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this.cityService.getDataNativeHttp();
+  }
 
   getSearch(ev) {
     const val = ev.target.value;
@@ -24,8 +26,8 @@ export class SearchComponent implements OnInit {
   }
 
   getCity(e) {
-    this.cityService
-      .getIdCity(e)
-      .subscribe(res => console.log(res), err => console.log(err));
+    // this.cityService
+    //   .getIdCity(e)
+    //   .subscribe(res => console.log(res), err => console.log(err));
   }
 }

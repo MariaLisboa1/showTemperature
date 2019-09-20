@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
 import { SearchComponent } from "./components/search/search.component";
-import { HTTP } from "@ionic-native/http";
+import { HTTP } from "@ionic-native/http/ngx";
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
