@@ -11,32 +11,6 @@ import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
 export class MapComponent implements OnInit {
   map: Map;
 
-  properties = [
-    {
-      city: "Cambridge",
-      state: "MA",
-      long: -71.10858,
-      lat: 42.35963
-    },
-    {
-      city: "Cambridge",
-      state: "MA",
-      long: -71.10869,
-      lat: 42.359103
-    },
-    {
-      city: "Boston",
-      state: "MA",
-      long: -71.110061,
-      lat: 42.360686
-    },
-    {
-      city: "Cambridge",
-      long: -71.110448,
-      lat: 42.360642
-    }
-  ];
-
   constructor(
     private geolocation: Geolocation,
     private climaTempoService: ClimaTempoService
@@ -60,16 +34,43 @@ export class MapComponent implements OnInit {
 
   leafletMap() {
     this.climaTempoService.listCities().subscribe(res => {
+      const $self = this;
       res.geonames.forEach(property => {
         marker([property.lat, property.lng])
           .addTo(this.map)
-          .on("click", function(e) {
-            console.log("oi", e);
+          .on("click", function(dadosCity) {
+            $self.getNameCityClick(dadosCity.latlng);
           })
-          .bindPopup(property.name)
+          .bindPopup()
           .openPopup();
       });
     });
+  }
+
+  //quando clicar na cidade, pega o nome, da cidade, pega id, e da put da api do clima para adicionar ao meu token
+  getIdCity(citys) {
+    this.climaTempoService.getIdCity(citys).subscribe(
+      res => {
+        console.log(res[0].id);
+      },
+      err => console.log(err)
+    );
+  }
+
+  getNameCityClick(latlng) {
+    console.log(latlng);
+
+    const lat = latlng.lat;
+    const lng = latlng.lng;
+    console.log(this);
+
+    this.climaTempoService
+      .getNameCity(lat, lng)
+      .subscribe(res => console.log(res), err => console.log(err));
+
+    // this.climaTempoService
+    //   .getNameCity(lat, lng)
+    //   .subscribe(res => console.log(res), err => console.log(err));
   }
 
   getTemperature(property) {
