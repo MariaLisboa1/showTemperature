@@ -6,14 +6,7 @@ export const environment = {
   production: false,
   apiClim: "http://apiadvisor.climatempo.com.br",
   tokenClim: "9e7c0ce5ef9a03684e2495a4fccbd270",
-  apiCities: "http://www.geonames.org/childrenJSON?geonameId=3408096"
+  apiCities: "http://www.geonames.org/childrenJSON?geonameId=3408096",
+  apiGoogle: "https://maps.googleapis.com/maps/api/geocode/json?address",
+  tokenGoogle: "AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY"
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

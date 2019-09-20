@@ -10,7 +10,7 @@ import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
 })
 export class MapComponent implements OnInit {
   map: Map;
-  propertyList = [];
+
   properties = [
     {
       city: "Cambridge",
@@ -43,37 +43,43 @@ export class MapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.map = new Map("mapId").setView([42.35663, -71.1109], 16);
+    this.geolocation
+      .getCurrentPosition()
+      .then(resp => {})
+      .catch(error => {
+        console.log("Erro ao recuperar sua posição", error);
+      });
+    this.map = new Map("mapId").setView([42.35663, -71.1109], 8);
 
     tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
       attribution: "edupala.com"
     }).addTo(this.map);
-
     this.leafletMap();
   }
 
   leafletMap() {
-    // this.geolocation
-    //   .getCurrentPosition()
-    //   .then(resp => {
-
-    //     this.map = new Map("mapId").setView([-41.3058, 174.82082], 8);
-
-    //   })
-    //   .catch(error => {
-    //     console.log("Erro ao recuperar sua posição", error);
+    // this.climaTempoService.listCities().subscribe(res => {
+    //   res.geonames.forEach(property => {
+    //     marker([property.lat, property.lng])
+    //       .addTo(this.map)
+    //       .bindPopup(property.name)
+    //       .openPopup();
     //   });
-    this.climaTempoService.listCities().subscribe(res => {
-      res.forEach(property => {
-        marker([property.lat, property.lgn])
-          .addTo(this.map)
-          .bindPopup(property.toponymName)
-          .openPopup();
-      });
+    // });
+
+    this.properties.forEach(property => {
+      marker([property.lat, property.long])
+        .addTo(this.map)
+        .bindPopup(property.city)
+        .openPopup();
     });
 
-    // for (const property of this.properties) {
-    //   console.log(property);
-    // }
+    // this.climaTempoService
+    //   .getTemperature()
+    //   .subscribe(res => console.log(res), err => console.log(err));
+  }
+
+  getTemperature(property) {
+    console.log("property");
   }
 }

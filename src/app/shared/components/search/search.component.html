@@ -1,0 +1,25 @@
+<ion-toolbar>
+  <ion-searchbar
+    animated
+    mode="md"
+    autocomplete="on"
+    color="primary"
+    placeholder="Procurar"
+    class="ion-padding"
+    (ionInput)="getSearch($event)"
+  ></ion-searchbar>
+  <ion-list>
+    <ion-item
+      *ngFor="let city of citys; let i = index"
+      (click)="getCity(city.results[i].address_components[i].long_name)"
+    >
+      <ion-label
+        >{{
+          city.results[i]
+            ? city.results[i].address_components[i].long_name
+            : "Cidade não encontrada."
+        }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-toolbar>
