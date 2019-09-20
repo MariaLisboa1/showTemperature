@@ -53,11 +53,7 @@ export class MapComponent implements OnInit {
 
     tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
       attribution: "edupala.com"
-    })
-      .addTo(this.map)
-      .on("onclick", function(e) {
-        console.log("oi", e);
-      });
+    }).addTo(this.map);
 
     this.leafletMap();
   }
@@ -67,6 +63,9 @@ export class MapComponent implements OnInit {
       res.geonames.forEach(property => {
         marker([property.lat, property.lng])
           .addTo(this.map)
+          .on("click", function(e) {
+            console.log("oi", e);
+          })
           .bindPopup(property.name)
           .openPopup();
       });
