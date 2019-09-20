@@ -21,73 +21,66 @@ export class ClimaTempoService {
     return this.http.get<any>(environment.apiCities);
   }
 
-  getIdCity(name) {
-    // console.log(name);
-    // const url = `${environment.apiClim}/api/v1/locale/city?name=${name}&state=AL/${environment.tokenClim}`;
-    // var headers = new Headers();
-    // headers.append("Access-Control-Allow-Origin", "*");
-    // return this.http.get(url, { headers });
+  getIdCity(city) {
+    // {{ base_url  }}/api/v1/locale/city?name=ouro branco&state=AL&token={{ token  }}
+    const url = `${environment.apiClim}/api/v1/locale/city?name=${city}&state=AL&token=${environment.tokenClim}`;
+
+    return this.http.get(url);
   }
 
-  async getDataStandard() {
-    let loading = await this.loadingCtrl.create();
-    await loading.present();
+  // async getDataStandard() {
+  //   let loading = await this.loadingCtrl.create();
+  //   await loading.present();
 
-    this.http
-      .get(
-        `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`
-      )
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        data => {
-          this.data = data["results"];
-        },
-        err => {
-          console.log("JS Call error: ", err);
-        }
-      );
-  }
+  //   this.http
+  //     .get(
+  //       `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`
+  //     )
+  //     .pipe(finalize(() => loading.dismiss()))
+  //     .subscribe(
+  //       data => {
+  //         this.data = data["results"];
+  //       },
+  //       err => {
+  //         console.log("JS Call error: ", err);
+  //       }
+  //     );
+  // }
 
-  async getDataNativeHttp() {
-    let loading = await this.loadingCtrl.create();
-    await loading.present();
+  // async getDataNativeHttp() {
+  //   let loading = await this.loadingCtrl.create();
+  //   await loading.present();
 
-    // Returns a promise, need to convert with of() to Observable (if want)!
-    from(
-      this.nativeHttp.get(
-        `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`,
-        {},
-        { "Content-Type": "application/json" }
-      )
-    )
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        data => {
-          let parsed = JSON.parse(data.data);
-          this.data = parsed.results;
-        },
-        err => {
-          console.log("Native Call error: ", err);
-        }
-      );
-  }
+  //   // Returns a promise, need to convert with of() to Observable (if want)!
+  //   from(
+  //     this.nativeHttp.get(
+  //       `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`,
+  //       {},
+  //       { "Content-Type": "application/json" }
+  //     )
+  //   )
+  //     .pipe(finalize(() => loading.dismiss()))
+  //     .subscribe(
+  //       data => {
+  //         let parsed = JSON.parse(data.data);
+  //         this.data = parsed.results;
+  //       },
+  //       err => {
+  //         console.log("Native Call error: ", err);
+  //       }
+  //     );
+  // }
 
-  getDataEverywhere() {
-    if (this.plt.is("cordova")) {
-      this.getDataNativeHttp();
-    } else {
-      this.getDataStandard();
-    }
-  }
+  // getDataEverywhere() {
+  //   if (this.plt.is("cordova")) {
+  //     this.getDataNativeHttp();
+  //   } else {
+  //     this.getDataStandard();
+  //   }
+  // }
 
-  getTemperature() {
-    const url = `${environment.apiClim}/api/v1/weather/locale/6809/current?token=${environment.tokenClim}`;
-
-    // var headers = new Headers();
-    // headers.append("Access-Control-Allow-Origin", "*");
-    // headers.append("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT");
-    // headers.append("Accept", "application/json");
-    // headers.append("content-type", "application/json");
+  getTemperature(cityId) {
+    const url = `${environment.apiClim}/api/v1/weather/locale/${cityId}/current?token=${environment.tokenClim}`;
 
     return this.http.get(url);
   }

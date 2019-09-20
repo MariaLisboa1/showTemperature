@@ -53,7 +53,12 @@ export class MapComponent implements OnInit {
 
     tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
       attribution: "edupala.com"
-    }).addTo(this.map);
+    })
+      .addTo(this.map)
+      .on("onclick", function(e) {
+        console.log("oi", e);
+      });
+
     this.leafletMap();
   }
 
@@ -66,20 +71,9 @@ export class MapComponent implements OnInit {
           .openPopup();
       });
     });
-
-    this.properties.forEach(property => {
-      marker([property.lat, property.long])
-        .addTo(this.map)
-        .bindPopup(property.city)
-        .openPopup();
-    });
-
-    this.climaTempoService
-      .getTemperature()
-      .subscribe(res => console.log(res), err => console.log(err));
   }
 
   getTemperature(property) {
-    console.log("property");
+    console.log(property);
   }
 }

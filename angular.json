@@ -21,8 +21,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [{
                 "glob": "**/*",
-                "input": "node_modules/leaflet/dist/images",
-                "output": "leaflet/"
+                "input": "src/assets",
+                "output": "assets"
               },
               {
                 "glob": "**/*.svg",
