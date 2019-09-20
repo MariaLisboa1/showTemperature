@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   apiClim: "http://apiadvisor.climatempo.com.br",
-  tokenClim: "",
   apiCities: "http://www.geonames.org/childrenJSON?geonameId=3408096",
   apiGoogle: "https://maps.googleapis.com/maps/api/geocode/json?address",
-  tokenGoogle: ""
+  tokenClim: "9e7c0ce5ef9a03684e2495a4fccbd270",
+  tokenGoogle: "AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY"
 };

@@ -81,7 +81,7 @@ export class ClimaTempoService {
   }
 
   getTemperature() {
-    const url = `${environment.apiClim}/api/v1/weather/locale/6809/current?${environment.tokenClim}`;
+    const url = `${environment.apiClim}/api/v1/weather/locale/6809/current?token=${environment.tokenClim}`;
 
     // var headers = new Headers();
     // headers.append("Access-Control-Allow-Origin", "*");

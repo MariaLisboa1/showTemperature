@@ -58,14 +58,14 @@ export class MapComponent implements OnInit {
   }
 
   leafletMap() {
-    // this.climaTempoService.listCities().subscribe(res => {
-    //   res.geonames.forEach(property => {
-    //     marker([property.lat, property.lng])
-    //       .addTo(this.map)
-    //       .bindPopup(property.name)
-    //       .openPopup();
-    //   });
-    // });
+    this.climaTempoService.listCities().subscribe(res => {
+      res.geonames.forEach(property => {
+        marker([property.lat, property.lng])
+          .addTo(this.map)
+          .bindPopup(property.name)
+          .openPopup();
+      });
+    });
 
     this.properties.forEach(property => {
       marker([property.lat, property.long])
@@ -74,9 +74,9 @@ export class MapComponent implements OnInit {
         .openPopup();
     });
 
-    // this.climaTempoService
-    //   .getTemperature()
-    //   .subscribe(res => console.log(res), err => console.log(err));
+    this.climaTempoService
+      .getTemperature()
+      .subscribe(res => console.log(res), err => console.log(err));
   }
 
   getTemperature(property) {
