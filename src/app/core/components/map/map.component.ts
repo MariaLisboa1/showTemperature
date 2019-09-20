@@ -53,11 +53,7 @@ export class MapComponent implements OnInit {
 
     tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
       attribution: "edupala.com"
-    })
-      .addTo(this.map)
-      .on("onclick", function(e) {
-        console.log("oi", e);
-      });
+    }).addTo(this.map);
 
     this.leafletMap();
   }
@@ -67,10 +63,24 @@ export class MapComponent implements OnInit {
       res.geonames.forEach(property => {
         marker([property.lat, property.lng])
           .addTo(this.map)
+          .on("click", function(dadosCity) {
+            this.getNameCityClick(dadosCity);
+          })
           .bindPopup(property.name)
           .openPopup();
       });
     });
+  }
+
+  getNameCityClick(latlng) {
+    console.log(latlng);
+
+    const lat = latlng.lat;
+    const lng = latlng.lng;
+
+    // this.climaTempoService
+    //   .getNameCity(lat, lng)
+    //   .subscribe(res => console.log(res), err => console.log(err));
   }
 
   getTemperature(property) {

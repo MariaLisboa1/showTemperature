@@ -22,62 +22,10 @@ export class ClimaTempoService {
   }
 
   getIdCity(city) {
-    // {{ base_url  }}/api/v1/locale/city?name=ouro branco&state=AL&token={{ token  }}
     const url = `${environment.apiClim}/api/v1/locale/city?name=${city}&state=AL&token=${environment.tokenClim}`;
 
     return this.http.get(url);
   }
-
-  // async getDataStandard() {
-  //   let loading = await this.loadingCtrl.create();
-  //   await loading.present();
-
-  //   this.http
-  //     .get(
-  //       `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`
-  //     )
-  //     .pipe(finalize(() => loading.dismiss()))
-  //     .subscribe(
-  //       data => {
-  //         this.data = data["results"];
-  //       },
-  //       err => {
-  //         console.log("JS Call error: ", err);
-  //       }
-  //     );
-  // }
-
-  // async getDataNativeHttp() {
-  //   let loading = await this.loadingCtrl.create();
-  //   await loading.present();
-
-  //   // Returns a promise, need to convert with of() to Observable (if want)!
-  //   from(
-  //     this.nativeHttp.get(
-  //       `${environment.apiClim}/api/v1/locale/city?name=maceio&state=AL/${environment.tokenClim}`,
-  //       {},
-  //       { "Content-Type": "application/json" }
-  //     )
-  //   )
-  //     .pipe(finalize(() => loading.dismiss()))
-  //     .subscribe(
-  //       data => {
-  //         let parsed = JSON.parse(data.data);
-  //         this.data = parsed.results;
-  //       },
-  //       err => {
-  //         console.log("Native Call error: ", err);
-  //       }
-  //     );
-  // }
-
-  // getDataEverywhere() {
-  //   if (this.plt.is("cordova")) {
-  //     this.getDataNativeHttp();
-  //   } else {
-  //     this.getDataStandard();
-  //   }
-  // }
 
   getTemperature(cityId) {
     const url = `${environment.apiClim}/api/v1/weather/locale/${cityId}/current?token=${environment.tokenClim}`;
@@ -88,6 +36,13 @@ export class ClimaTempoService {
   getCity(city) {
     return this.http.get<any>(
       `${environment.apiGoogle}=${city}+AL&key=${environment.tokenGoogle}`
+    );
+  }
+
+  getNameCity(lat, lng) {
+    console.log(lat, lng);
+    return this.http.get<any>(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
     );
   }
 }
