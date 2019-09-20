@@ -10,12 +10,10 @@ import { finalize } from "rxjs/operators";
   providedIn: "root"
 })
 export class ClimaTempoService {
-  constructor(
-    private http: HttpClient,
-    private nativeHttp: HTTP,
-    private plt: Platform,
-    private loadingCtrl: LoadingController
-  ) {}
+  constructor(private http: HttpClient) // private nativeHttp: HTTP,
+  // private plt: Platform,
+  // private loadingCtrl: LoadingController
+  {}
   data = [];
   listCities() {
     return this.http.get<any>(environment.apiCities);
@@ -39,10 +37,18 @@ export class ClimaTempoService {
     );
   }
 
-  getNameCity(lat, lng) {
-    console.log(lat, lng);
-    return this.http.get<any>(
+  static getNameCity(lat, lng) {
+    const climaTempoService = new ClimaTempoService(lat);
+
+    return climaTempoService.http.get<any>(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
     );
   }
+
+  // getNameCity(lat, lng) {
+  //   console.log(lat, lng);
+  //   return this.http.get<any>(
+  //     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
+  //   );
+  // }
 }
