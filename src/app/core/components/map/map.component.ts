@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Map, latLng, tileLayer, Layer, marker } from "leaflet";
+import { Map, latLng, tileLayer, Layer, marker, Popup } from "leaflet";
 import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
 import { AlertController } from "@ionic/angular";
 import { SendAlert } from "src/app/shared/helpers/sendAlert/sendAlert";
@@ -43,38 +43,19 @@ export class MapComponent implements OnInit {
   }
 
   leafletMap() {
-    // var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-
-    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-    //     maxZoom: 18,
-    //     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-    //         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-    //         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    //     id: 'mapbox.streets'
-    // }).addTo(mymap);
-
-    // var markers = [
-    //     {pos: [51.51, -0.10], popup: "This is the popup for marker #1"},
-    //     {pos: [51.50, -0.09], popup: "This is the popup for marker #2"},
-    //     {pos: [51.49, -0.08], popup: "This is the popup for marker #3"}];
-    // markers.forEach(function (obj) {
-    //     var m = L.marker(obj.pos).addTo(mymap),
-    //         p = new L.Popup({ autoClose: false, closeOnClick: false })
-    //                 .setContent(obj.popup)
-    //                 .setLatLng(obj.pos);
-    //     m.bindPopup(p);
-    // });
-
     this.climaTempoService.listCities().subscribe(res => {
       const $self = this;
       res.geonames.forEach(property => {
+        const popup = new Popup({ autoClose: false, closeOnClick: false })
+          .setContent(property.name)
+          .setLatLng([property.lat, property.lng]);
+
         marker([property.lat, property.lng])
           .addTo(this.map)
           .on("click", function(dadosCity) {
             $self.getNameCityClick(dadosCity.latlng);
           })
-          .setLatLng([property.lat, property.lng])
-          .bindPopup(property.name)
+          .bindPopup(popup)
           .openPopup();
       });
     });
