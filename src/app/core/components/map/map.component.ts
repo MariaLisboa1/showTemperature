@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Map, latLng, tileLayer, Layer, marker } from "leaflet";
+import { Map, latLng, tileLayer, Layer, marker, Popup } from "leaflet";
 import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
 import { AlertController } from "@ionic/angular";
 import { SendAlert } from "src/app/shared/helpers/sendAlert/sendAlert";
@@ -62,15 +62,16 @@ export class MapComponent implements OnInit {
     this.climaTempoService.listCities().subscribe(res => {
       const $self = this;
       res.geonames.forEach(property => {
+        const popup = new Popup({ autoClose: false, closeOnClick: false })
+          .setContent(property.name)
+          .setLatLng([property.lat, property.lng]);
+
         marker([property.lat, property.lng])
           .addTo(this.map)
           .on("click", function(dadosCity) {
             $self.getNameCityClick(dadosCity.latlng);
           })
-          .Popup()
-          .setContent(property.name)
-          .setLatLng([property.lat, property.lng])
-          // .bindPopup(property.name)
+          .bindPopup(popup)
           .openPopup();
       });
     });
