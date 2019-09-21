@@ -20,20 +20,26 @@ export class MapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.geolocation
-    //   .getCurrentPosition()
-    //   .then(resp => {})
-    //   .catch(error => {
-    //     console.log("Erro ao recuperar sua posição", error);
-    //   });
+    this.geolocation
+      .getCurrentPosition()
+      .then(resp => {
+        this.map = new Map("mapId").setView(
+          [resp.coords.latitude, resp.coords.longitude],
+          8
+        );
 
-    this.map = new Map("mapId").setView([42.35663, -71.1109], 8);
+        tileLayer(
+          "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+          {
+            attribution: "edupala.com"
+          }
+        ).addTo(this.map);
 
-    tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
-      attribution: "edupala.com"
-    }).addTo(this.map);
-
-    this.leafletMap();
+        this.leafletMap();
+      })
+      .catch(error => {
+        console.log("Erro ao recuperar sua posição", error);
+      });
   }
 
   leafletMap() {
@@ -67,10 +73,8 @@ export class MapComponent implements OnInit {
           .on("click", function(dadosCity) {
             $self.getNameCityClick(dadosCity.latlng);
           })
-          .Popup()
-          .setContent(property.name)
           .setLatLng([property.lat, property.lng])
-          // .bindPopup(property.name)
+          .bindPopup(property.name)
           .openPopup();
       });
     });
