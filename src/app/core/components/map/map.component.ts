@@ -12,7 +12,7 @@ import { SendAlert } from "src/app/shared/helpers/sendAlert/sendAlert";
 })
 export class MapComponent implements OnInit {
   map: Map;
-
+  climate;
   constructor(
     private geolocation: Geolocation,
     private climaTempoService: ClimaTempoService,
@@ -43,9 +43,10 @@ export class MapComponent implements OnInit {
   }
 
   leafletMap() {
+    console.log(this.getIdCity("Água Branca"));
     this.climaTempoService.listCities().subscribe(res => {
       const $self = this;
-      res.geonames.forEach(property => {
+      res.geonames.forEach(async property => {
         const popup = new Popup({ autoClose: false, closeOnClick: false })
           .setContent(property.name)
           .setLatLng([property.lat, property.lng]);
@@ -64,9 +65,10 @@ export class MapComponent implements OnInit {
   //quando clicar na cidade, pega o nome, da cidade, pega id, e da put da api do clima para adicionar ao meu token
   getIdCity(citys) {
     this.climaTempoService.getIdCity(citys).subscribe(
-      res => {
+      async res => {
         const idCity = res[0].id;
-        this.getTemperature(idCity);
+        const temp = await this.getTemperature(idCity);
+        console.log(temp);
       },
       err => console.log(err)
     );
@@ -88,8 +90,11 @@ export class MapComponent implements OnInit {
   getTemperature(idCity) {
     this.climaTempoService.getTemperature(idCity).subscribe(
       res => {
+        console.log(res);
         const climate = res;
-        this.sendAlert.presentAlert(climate);
+
+        return climate;
+        // this.sendAlert.presentAlert(climate);
       },
       err => console.log(err)
     );

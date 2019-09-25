@@ -25,7 +25,7 @@ export class ClimaTempoService {
   }
 
   getTemperature(cityId) {
-    console.log(cityId);
+    // console.log(cityId);
 
     const url = `${environment.apiClim}/api/v1/weather/locale/${cityId}/current?token=${environment.tokenClim}`;
 
@@ -50,5 +50,10 @@ export class ClimaTempoService {
     return this.http.get<any>(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
     );
+  }
+
+  cadastraCity(idCity) {
+    // return this.http.put(`http://apiadvisor.climatempo.com.br/api-manager/user-token/9e7c0ce5ef9a03684e2495a4fccbd270/locales`,
+    // )
   }
 }
