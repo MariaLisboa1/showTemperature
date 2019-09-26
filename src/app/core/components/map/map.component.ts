@@ -40,14 +40,43 @@ export class MapComponent implements OnInit {
         this.leafletMap();
       })
       .catch(error => {
+        this.leafletMap();
         console.log("Erro ao recuperar sua posição", error);
       });
   }
 
   leafletMap() {
-    this.climaTempoService.listCities().subscribe(res => {
+    this.climaTempoService.listCities().subscribe(
+      res => {
+        const $self = this;
+
+        res.geonames.forEach(async property => {
+          $self.sendPouch(property);
+          const popup = new Popup({ autoClose: false, closeOnClick: false })
+            .setContent(property.name)
+            .setLatLng([property.lat, property.lng]);
+
+          marker([property.lat, property.lng])
+            .addTo(this.map)
+            .on("click", function(dadosCity) {
+              $self.getTemperature("7765");
+            })
+            .bindPopup(popup)
+            .openPopup();
+        });
+      },
+      err => this.getAllCitys()
+    );
+  }
+
+  sendPouch(citys) {
+    this.climaTempoService.insertCitys(citys);
+  }
+
+  async getAllCitys() {
+    await this.climaTempoService.getCitys().then(value => {
       const $self = this;
-      res.geonames.forEach(async property => {
+      value.forEach(async property => {
         const popup = new Popup({ autoClose: false, closeOnClick: false })
           .setContent(property.name)
           .setLatLng([property.lat, property.lng]);
@@ -78,7 +107,6 @@ export class MapComponent implements OnInit {
   getTemperature(idCity) {
     this.climaTempoService.getTemperature(idCity).subscribe(
       res => {
-        console.log(res);
         const climate = res;
 
         this.sendAlert.presentAlert(climate);
@@ -91,7 +119,7 @@ export class MapComponent implements OnInit {
     const loading = await this.loadingController.create({
       spinner: "circles",
       animated: true,
-      duration: 5000,
+      duration: 1000,
       message: "Por favor espere...",
       translucent: true,
       cssClass: "custom-class custom-loading"

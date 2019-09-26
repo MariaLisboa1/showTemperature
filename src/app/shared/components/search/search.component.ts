@@ -9,7 +9,8 @@ import { SendAlert } from "../../helpers/sendAlert/sendAlert";
   styleUrls: ["./search.component.scss"]
 })
 export class SearchComponent implements OnInit {
-  citys;
+  citys = [];
+  cityPouch;
   cityId;
   nameCity;
   constructor(
@@ -25,9 +26,22 @@ export class SearchComponent implements OnInit {
   }
 
   initializeCity(city) {
-    this.cityService
-      .getCity(city)
-      .subscribe(res => (this.citys = [res]), err => console.log(err));
+    this.cityService.getCity(city).subscribe(
+      res => {
+        this.citys = res.results[0].address_components[0].long_name;
+      },
+      err => {
+        this.getAllCitys(city);
+      }
+    );
+  }
+
+  async getAllCitys(city) {
+    await this.cityService.getCitys().then(citys => {
+      const getCity = citys.find(e => e.name === city);
+
+      getCity !== undefined ? (this.citys = getCity.name) : "";
+    });
   }
 
   getCity(city) {
