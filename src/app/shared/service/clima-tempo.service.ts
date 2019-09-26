@@ -1,19 +1,29 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { HTTP } from "@ionic-native/http/ngx";
-import { Platform, LoadingController } from "@ionic/angular";
-import { from } from "rxjs";
-import { finalize } from "rxjs/operators";
+// import Pouchdb from 'pouchdb';
+import * as Pouchdb from "pouchdb";
 
 @Injectable({
   providedIn: "root"
 })
 export class ClimaTempoService {
+  data: any;
+  db: any;
+  remote: any;
   constructor(
     private http: HttpClient // private nativeHttp: HTTP, // private plt: Platform, // private loadingCtrl: LoadingController
-  ) {}
-  data = [];
+  ) {
+    // this.db = new Pouchdb("todo");
+    // this.remote = "http://127.0.0.1:5984/todo";
+  }
+
+  insertCompra(valores) {
+    console.log(valores);
+
+    this.db.post(valores);
+  }
+
   listCities() {
     return this.http.get<any>(environment.apiCities);
   }
@@ -38,22 +48,17 @@ export class ClimaTempoService {
     );
   }
 
-  static getNameCity(lat, lng) {
-    const climaTempoService = new ClimaTempoService(lat);
+  // static getNameCity(lat, lng) {
+  //   const climaTempoService = new ClimaTempoService(lat);
 
-    return climaTempoService.http.get<any>(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
-    );
-  }
+  //   return climaTempoService.http.get<any>(
+  //     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
+  //   );
+  // }
 
   getNameCity(lat, lng) {
     return this.http.get<any>(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCgXayXgfesJodYDaAz98NhBqiTJPFedsY`
     );
-  }
-
-  cadastraCity(idCity) {
-    // return this.http.put(`http://apiadvisor.climatempo.com.br/api-manager/user-token/9e7c0ce5ef9a03684e2495a4fccbd270/locales`,
-    // )
   }
 }

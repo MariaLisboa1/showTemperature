@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
     this.cityService.getIdCity(city).subscribe(
       res => {
         this.cityId = res[0].id;
-        this.getclimate(this.cityId);
+        this.getclimate("7765");
       },
       err => console.log(err)
     );

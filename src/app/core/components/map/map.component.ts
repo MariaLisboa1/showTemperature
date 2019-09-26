@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { Map, latLng, tileLayer, Layer, marker, Popup } from "leaflet";
+import { Map, tileLayer, marker, Popup } from "leaflet";
 import { ClimaTempoService } from "src/app/shared/service/clima-tempo.service";
-import { AlertController } from "@ionic/angular";
 import { SendAlert } from "src/app/shared/helpers/sendAlert/sendAlert";
+import { LoadingController } from "@ionic/angular";
 
 @Component({
   selector: "app-map",
@@ -16,16 +16,18 @@ export class MapComponent implements OnInit {
   constructor(
     private geolocation: Geolocation,
     private climaTempoService: ClimaTempoService,
-    private sendAlert: SendAlert
+    private sendAlert: SendAlert,
+    private loadingController: LoadingController
   ) {}
 
   ngOnInit() {
+    this.presentLoadingWithOptions();
     this.geolocation
       .getCurrentPosition()
       .then(resp => {
         this.map = new Map("mapId").setView(
           [resp.coords.latitude, resp.coords.longitude],
-          8
+          10
         );
 
         tileLayer(
@@ -43,7 +45,6 @@ export class MapComponent implements OnInit {
   }
 
   leafletMap() {
-    console.log(this.getIdCity("Água Branca"));
     this.climaTempoService.listCities().subscribe(res => {
       const $self = this;
       res.geonames.forEach(async property => {
@@ -54,24 +55,12 @@ export class MapComponent implements OnInit {
         marker([property.lat, property.lng])
           .addTo(this.map)
           .on("click", function(dadosCity) {
-            $self.getNameCityClick(dadosCity.latlng);
+            $self.getTemperature("7765");
           })
           .bindPopup(popup)
           .openPopup();
       });
     });
-  }
-
-  //quando clicar na cidade, pega o nome, da cidade, pega id, e da put da api do clima para adicionar ao meu token
-  getIdCity(citys) {
-    this.climaTempoService.getIdCity(citys).subscribe(
-      async res => {
-        const idCity = res[0].id;
-        const temp = await this.getTemperature(idCity);
-        console.log(temp);
-      },
-      err => console.log(err)
-    );
   }
 
   getNameCityClick(latlng) {
@@ -81,7 +70,6 @@ export class MapComponent implements OnInit {
     this.climaTempoService.getNameCity(lat, lng).subscribe(
       res => {
         const city = res.results[1].address_components[0].long_name;
-        this.getIdCity(city);
       },
       err => console.log(err)
     );
@@ -93,10 +81,21 @@ export class MapComponent implements OnInit {
         console.log(res);
         const climate = res;
 
-        return climate;
-        // this.sendAlert.presentAlert(climate);
+        this.sendAlert.presentAlert(climate);
       },
       err => console.log(err)
     );
+  }
+
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingController.create({
+      spinner: "circles",
+      animated: true,
+      duration: 5000,
+      message: "Por favor espere...",
+      translucent: true,
+      cssClass: "custom-class custom-loading"
+    });
+    return await loading.present();
   }
 }
